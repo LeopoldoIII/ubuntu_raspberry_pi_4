@@ -151,11 +151,6 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 
 Android SDK 
 ---
-https://linoxide.com/ubuntu-how-to/install-android-sdk-manager-linux-ubuntu-16-04/
-https://developer.android.com/studio#systemrequirements
-http://www.timelesssky.com/blog/building-android-sdk-build-tools-aapt-for-debian-arm
-https://github.com/skyleecm/android-build-tools-for-arm/tree/build-21
-https://www.reddit.com/r/androiddev/comments/cr79qk/android_sdk_for_arm/
 
 **android sdk** 
 
@@ -164,6 +159,18 @@ sudo apt-get install adb android-sdk-platform-tools-common
 sudo apt-get install android-tools-adb android-tools-fastboot
 sudo apt install android-sdk
 ```
+libraries are in the path `/usr/lib/android`
+
+https://linoxide.com/ubuntu-how-to/install-android-sdk-manager-linux-ubuntu-16-04/
+
+https://developer.android.com/studio#systemrequirements
+
+http://www.timelesssky.com/blog/building-android-sdk-build-tools-aapt-for-debian-arm
+
+https://github.com/skyleecm/android-build-tools-for-arm/tree/build-21
+
+https://www.reddit.com/r/androiddev/comments/cr79qk/android_sdk_for_arm/
+
 
 JAVA
 ---

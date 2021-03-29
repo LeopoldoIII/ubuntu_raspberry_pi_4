@@ -27,7 +27,7 @@ you will ask to update your password
 
 wifi
 ---
-
+https://linuxconfig.org/ubuntu-20-04-connect-to-wifi-from-command-line
 
 List your interfaces to identify your wirieless 
 
@@ -50,8 +50,6 @@ add your ssdi and password
 
 Replace your SSID-NAME-HERE and PASSWORD-HERE
 
-https://linuxconfig.org/ubuntu-20-04-connect-to-wifi-from-command-line
-
 ```
 sudo apt install net-tools
 ```
@@ -62,6 +60,34 @@ sudo netplan apply
 ```
 
 run `ifconfig` and verify the conection with your wifi 
+
+Option 2
+
+List your interface 
+
+```
+iw dev 
+```
+
+Scan  
+
+```
+sudo iw wlp2s0 scan
+```
+
+Connet 
+
+```
+nmcli dev wifi connect ESSID password WifiPassword
+```
+
+Activate device 
+
+```
+sudo ip link set wlp1s0 up
+```
+
+https://es.linux-console.net/?p=357
 
 Samba 
 ---

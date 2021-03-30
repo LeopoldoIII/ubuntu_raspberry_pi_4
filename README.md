@@ -159,7 +159,7 @@ sudo apt-get install adb android-sdk-platform-tools-common
 sudo apt-get install android-tools-adb android-tools-fastboot
 sudo apt install android-sdk
 ```
-libraries are in the path `/usr/lib/android`
+libraries are in the path `/usr/lib/android-sdk/`
 
 https://linoxide.com/ubuntu-how-to/install-android-sdk-manager-linux-ubuntu-16-04/
 
@@ -170,6 +170,13 @@ http://www.timelesssky.com/blog/building-android-sdk-build-tools-aapt-for-debian
 https://github.com/skyleecm/android-build-tools-for-arm/tree/build-21
 
 https://www.reddit.com/r/androiddev/comments/cr79qk/android_sdk_for_arm/
+
+```
+#ANDROID HOME 
+export ANDROID_HOME=~/usr/lib/android-sdk
+export PATH=$ANDROID_HOME/platform-tools:$PATH
+export PATH=$ANDROID_HOME/tools:$PATH
+```
 
 
 JAVA
@@ -182,5 +189,16 @@ SSH ubuntu-server
 ---
 https://phoenixnap.com/kb/enable-ssh-raspberry-pi
 https://pimylifeup.com/ubuntu-server-raspberry-pi/
+
+
+Oh My ZSH
+---
+
+sudo apt-get install zsh
+sudo apt-get install git-core
+chsh -s `which zsh`
+
+https://geekytheory.com/como-instalar-oh-my-zsh-en-ubuntu
+
 
 

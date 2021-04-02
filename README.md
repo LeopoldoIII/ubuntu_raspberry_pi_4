@@ -200,5 +200,10 @@ chsh -s `which zsh`
 
 https://geekytheory.com/como-instalar-oh-my-zsh-en-ubuntu
 
+Add User 
+---
+
+https://linuxize.com/post/how-to-add-and-delete-users-on-ubuntu-18-04/
+
 
 

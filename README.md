@@ -206,4 +206,9 @@ Add User
 https://linuxize.com/post/how-to-add-and-delete-users-on-ubuntu-18-04/
 
 
+sudo
+---
+
+https://linuxconfig.org/sudo-install-usage-and-sudoers-config-file-basics
+
 

@@ -211,4 +211,7 @@ sudo
 
 https://linuxconfig.org/sudo-install-usage-and-sudoers-config-file-basics
 
-
+VPN
+---
+After to configure a vpn click on ´Use this connection only for resources on its network´
+![image](https://user-images.githubusercontent.com/26559577/117186430-6ec97080-ada0-11eb-8f0e-b09c8dbc51a2.png)

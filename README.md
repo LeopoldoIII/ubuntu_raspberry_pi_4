@@ -193,10 +193,11 @@ https://pimylifeup.com/ubuntu-server-raspberry-pi/
 
 Oh My ZSH
 ---
-
+```
 sudo apt-get install zsh
 sudo apt-get install git-core
 chsh -s `which zsh`
+```
 
 https://geekytheory.com/como-instalar-oh-my-zsh-en-ubuntu
 
@@ -215,3 +216,13 @@ VPN
 ---
 After to configure a vpn click on ´Use this connection only for resources on its network´
 ![image](https://user-images.githubusercontent.com/26559577/117186430-6ec97080-ada0-11eb-8f0e-b09c8dbc51a2.png)
+
+sdkman
+---
+
+```
+curl -s get.sdkman.io | bash
+source "/home/user/.sdkman/bin/sdkman-init.sh"
+sdk install groovy # install groovy for example
+```
+

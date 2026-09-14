@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  sonarqube-db:
+    image: postgres:15-alpine
+    container_name: devlab-sonarqube-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar_secure_password
+      POSTGRES_DB: sonar
+    volumes:
+      - sonarqube_db_data:/var/lib/postgresql/data
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: devlab-sonarqube
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar_secure_password
+      SONAR_JDBC_URL: jdbc:postgresql://sonarqube-db:5432/sonar
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    depends_on:
+      - sonarqube-db
+
+  trivy-server:
+    image: aquasec/trivy:latest
+    container_name: devlab-trivy
+    restart: unless-stopped
+    command: server --listen 0.0.0.0:4954
+    ports:
+      - "4954:4954"
+    volumes:
+      - trivy_cache:/root/.cache/trivy
+
+  owasp-zap:
+    image: zaproxy/zap-stable:latest
+    container_name: devlab-owasp-zap
+    restart: unless-stopped
+    command: zap-webcmd.sh
+    ports:
+      - "8095:8080"
+    volumes:
+      - zap_data:/zap/wrk
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: devlab-tailscale
+    restart: unless-stopped
+    hostname: devlab-server
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    volumes:
+      - tailscale_data:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+volumes:
+  sonarqube_db_data:
+    name: devlab_sonarqube_db_data
+  sonarqube_data:
+    name: devlab_sonarqube_data
+  sonarqube_extensions:
+    name: devlab_sonarqube_extensions
+  sonarqube_logs:
+    name: devlab_sonarqube_logs
+  trivy_cache:
+    name: devlab_trivy_cache
+  zap_data:
+    name: devlab_zap_data
+  tailscale_data:
+    name: devlab_tailscale_data

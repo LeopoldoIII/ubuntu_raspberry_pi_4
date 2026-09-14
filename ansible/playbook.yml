@@ -1,0 +1,33 @@
+---
+- name: Automate DevLab Provisioning Across Nodes
+  hosts: devlab_servers
+  become: true
+
+  tasks:
+    - name: Ensure base packages are updated
+      apt:
+        update_cache: yes
+        name:
+          - curl
+          - git
+          - htop
+          - net-tools
+          - ca-certificates
+          - software-properties-common
+          - ufw
+          - fail2ban
+        state: present
+
+    - name: Clone DevLab Repository
+      git:
+        repo: 'https://github.com/LeopoldoIII/ubuntu_raspberry_pi_4.git'
+        dest: /opt/ubuntu_raspberry_pi_4
+        force: yes
+
+    - name: Execute DevLab Setup Engine
+      command: /opt/ubuntu_raspberry_pi_4/script.sh --all --non-interactive
+      register: devlab_output
+
+    - name: Display Setup Output
+      debug:
+        msg: "{{ devlab_output.stdout }}"

@@ -1,0 +1,79 @@
+pageInfo:
+  title: DevLab Control Center
+  description: Internal Development, AI & DevSecOps Laboratory Dashboard
+  navLinks:
+    - title: GitHub Repo
+      path: https://github.com
+appConfig:
+  theme: modern
+  layout: auto
+  iconSize: medium
+  statusCheck: true
+  statusCheckInterval: 10
+
+sections:
+  - name: AI & LLM Tools
+    icon: fas fa-brain
+    items:
+      - title: Open WebUI (Local LLMs)
+        description: AI Assistant & RAG Interface (Ollama)
+        url: http://localhost:3000
+        icon: fas fa-robot
+        statusCheck: true
+      - title: Ollama API Endpoint
+        description: OpenAI-compatible LLM Server API
+        url: http://localhost:11434
+        icon: fas fa-microchip
+        statusCheck: true
+
+  - name: DevSecOps & Security
+    icon: fas fa-shield-alt
+    items:
+      - title: SonarQube Code Scanner
+        description: SAST Code Quality & OWASP Security
+        url: http://localhost:9000/sonar
+        icon: fas fa-bug
+        statusCheck: true
+      - title: Trivy Vulnerability Scanner
+        description: Container & Code CVE Inspector
+        url: http://localhost:4954
+        icon: fas fa-search
+        statusCheck: true
+      - title: OWASP ZAP Scanner
+        description: DAST Web Application Security Testing
+        url: http://localhost:8095
+        icon: fas fa-user-ninja
+        statusCheck: true
+
+  - name: CI/CD & Cloud Simulation
+    icon: fas fa-cogs
+    items:
+      - title: Woodpecker CI
+        description: Real-time CI/CD Pipeline Console
+        url: http://localhost:8000
+        icon: fas fa-code-branch
+        statusCheck: true
+      - title: Floci Cloud Emulator UI
+        description: AWS/GCP/Azure Local Emulation
+        url: http://localhost:4000
+        icon: fas fa-cloud
+        statusCheck: true
+
+  - name: Management & Telemetry
+    icon: fas fa-chart-line
+    items:
+      - title: Beszel Real-time Telemetry
+        description: Sub-second Hardware CPU/RAM/Temp Metrics
+        url: http://localhost:8090
+        icon: fas fa-desktop
+        statusCheck: true
+      - title: Portainer Docker Manager
+        description: Real-time Container Logs & Stack Control
+        url: http://localhost:9000
+        icon: fab fa-docker
+        statusCheck: true
+      - title: Adminer Database Explorer
+        description: PostgreSQL (pgvector) & Redis Web UI
+        url: http://localhost:8080
+        icon: fas fa-database
+        statusCheck: true

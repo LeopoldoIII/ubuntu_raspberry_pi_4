@@ -1,228 +1,177 @@
-# ubuntu_raspberry_pi_4
+# DevLab: Multi-Architecture Internal Development, Kubernetes, DevSecOps & Local LLM Laboratory
 
-**Instructions to setup a raspberry pi 4 with Ubuntu Server 20.04.2 LTS**
+[![Ubuntu 24.04 LTS](https://img.shields.io/badge/Ubuntu-24.04%20LTS-orange?style=flat&logo=ubuntu)](https://ubuntu.com)
+[![Docker Engine](https://img.shields.io/badge/Docker-26.0+-blue?style=flat&logo=docker)](https://docker.com)
+[![Kubernetes K3s](https://img.shields.io/badge/Kubernetes-K3s-326CE5?style=flat&logo=kubernetes)](https://k3s.io)
+[![Ollama LLM](https://img.shields.io/badge/AI-Ollama-black?style=flat&logo=ollama)](https://ollama.com)
+[![Floci Cloud](https://img.shields.io/badge/Cloud%20Emulator-Floci.io-purple?style=flat&logo=amazon-aws)](https://github.com/floci-io)
+[![SonarQube](https://img.shields.io/badge/Security-SonarQube-4E9BCD?style=flat&logo=sonarqube)](https://sonarqube.org)
+[![Terraform / IaC](https://img.shields.io/badge/IaC-Terraform-7B42BC?style=flat&logo=terraform)](https://terraform.io)
 
-Burn Ubuntu into micro SD
+Transform your hardware—whether a **Lenovo ThinkPad / PC (x86_64, 32GB RAM)** or a **Raspberry Pi 4/5 (ARM64, 4GB/8GB RAM)**—into a state-of-the-art, fully containerized **Internal Development, AI, Kubernetes & DevSecOps Laboratory**.
+
 ---
 
+## 🌟 Key Capabilities
 
-Download Ubuntu Server 20.04.2 LTS
+- **Interactive TUI Installer Wizard (`script.sh`)**: Terminal User Interface powered by `whiptail` that auto-detects CPU architecture (`x86_64` vs `arm64`), total RAM, and storage space, dynamically calibrating recommended LLM models.
+- **Local AI & Coding Assistant Stack**: Containerized **Ollama** engine paired with **Open WebUI** and OpenAI-compatible API endpoint (`http://localhost:11434/v1`) for VS Code / Antigravity / Continue.dev integration.
+- **Offline Cloud Emulation with Floci**: Emulate AWS/GCP/Azure services (S3, DynamoDB, SQS, SNS, Lambda) locally without cloud accounts using [Floci.io](https://github.com/floci-io).
+- **Infrastructure as Code (Terraform) & Automation (Ansible)**: Provision local cloud resources using Terraform against Floci local endpoints and manage multi-node deployments over SSH with Ansible playbooks.
+- **Databases & AI Vector Store**: **PostgreSQL 16** with `pgvector` extension for RAG (Retrieval-Augmented Generation) applications, **Redis 7** for caching/queues, and **Adminer** for visual web management.
+- **DevSecOps & Code Quality Suite**: **SonarQube Community Edition** for SAST code scanning, **OWASP ZAP** for DAST web app security testing, **Trivy** for vulnerability scanning, **UFW + Fail2ban** for host hardening, and **Tailscale** for zero-trust remote access.
+- **Lightweight Kubernetes (K3s)**: Full learning path with pre-configured manifests for Namespaces, Pods, Deployments, Services, Ingress, and **StatefulSets** with Persistent Volume Claims.
+- **Unified Real-time Control Center**: Single-page dashboard (**Dashy**), sub-second hardware telemetry (**Beszel/Netdata**), live container control (**Portainer**), and live CI/CD pipeline tracking (**Woodpecker CI**).
 
-https://ubuntu.com/download/raspberry-pi
-
-Im using balena to install ubuntu into the microSDCard
-
-https://www.balena.io/etcher/
-
-Boot from the microSd
 ---
 
-User ubuntu 
-password ubuntu 
-https://wiki.ubuntu.com/ARM/RaspberryPi#First_boot_.28Username.2FPassword.29
-you will ask to update your password
+## 📐 Architecture & Components Overview
 
-![image](https://user-images.githubusercontent.com/26559577/110670508-13f60d00-8193-11eb-9e2c-439e06f8c76b.png)
+```mermaid
+graph TD
+    A["Host OS: Ubuntu Server 24.04 LTS"] --> B["Hardware Inspection Engine (x86_64 / ARM64)"]
+    B --> C["Interactive TUI Installer / CLI Flags (script.sh)"]
 
+    C --> D["Host Security Hardening (UFW Firewall + Fail2ban)"]
+    C --> E["Unified Web Dashboard (Dashy - Port 80)"]
+    C --> F["Docker Compose Stacks"]
+    C --> G["Kubernetes Cluster (K3s Engine)"]
+    C --> H["IaC & Automation Engine (Terraform & Ansible)"]
 
-wifi
----
-https://linuxconfig.org/ubuntu-20-04-connect-to-wifi-from-command-line
+    F --> F1["Local LLMs: Ollama + Open WebUI"]
+    F --> F2["Cloud Emulation: Floci AWS/GCP/Azure"]
+    F --> F3["Databases: PostgreSQL (pgvector) + Redis + Adminer"]
+    F --> F4["DevSecOps: SonarQube + OWASP ZAP + Trivy + Tailscale"]
+    F --> F5["CI/CD Pipeline: Woodpecker CI Server & Runner"]
+    F --> F6["Real-Time Telemetry: Beszel + Portainer"]
 
-List your interfaces to identify your wirieless 
+    H --> H1["Terraform / OpenTofu (Local S3, DynamoDB, SQS on Floci)"]
+    H --> H2["Ansible Playbooks (Multi-Node Server Provisioning)"]
 
-```
-ls /sys/class/net
-```
-
-![image](https://user-images.githubusercontent.com/26559577/110676407-8b2e9f80-8199-11eb-8712-fd630617a0bf.png)
-
-
-```
-sudo vi /etc/netplan/50-cloud-init.yaml
-```
-
-![image](https://user-images.githubusercontent.com/26559577/110676610-c4670f80-8199-11eb-93a2-115cf039b166.png)
-
-add your ssdi and password 
-
-![image](https://user-images.githubusercontent.com/26559577/110677033-49eabf80-819a-11eb-85a2-8be097feb685.png)
-
-Replace your SSID-NAME-HERE and PASSWORD-HERE
-
-```
-sudo apt install net-tools
-```
-Then 
-
-```
-sudo netplan apply
+    G --> G1["K8s Learning Manifests: Pods, Deployments, Services"]
+    G --> G2["K8s Database StatefulSets & PersistentStorage (PVCs)"]
+    G --> G3["K8s Security: RBAC & NetworkPolicies"]
 ```
 
-run `ifconfig` and verify the conection with your wifi 
-
-Option 2
-
-List your interface 
-
-```
-iw dev 
-```
-
-Scan  
-
-```
-sudo iw wlp2s0 scan
-```
-
-Connet 
-
-```
-nmcli dev wifi connect ESSID password WifiPassword
-```
-
-Activate device 
-
-```
-sudo ip link set wlp1s0 up
-```
-
-https://es.linux-console.net/?p=357
-
-Samba 
----
-https://ubuntu.com/tutorials/install-and-configure-samba#1-overview
-
-```
-sudo apt update
-sudo apt install samba
-```
-
-Add the following lines into this file  `/etc/samba/smb.conf` replace values as you wish 
-
-```
-[sambashare]
-    comment = Samba on Ubuntu
-    path = /home/username/sambashare
-    read only = no
-    browsable = yes
-```
-
-restart the service 
-
-
-```
-sudo service smbd restart
-```
-
-Update the firewall rules to allow Samba traffic
-
-```
-sudo ufw allow samba
-```
-
-
-Since Samba doesn’t use the system account password, we need to set up a Samba password for our user account
-Username used must belong to a system account, else it won’t save.
-
-```
-sudo smbpasswd -a username
-```
-
-RVM 
----
-https://raspberrypi.stackexchange.com/questions/1010/can-i-install-the-ruby-version-manager
-
-```
-curl -L https://get.rvm.io | bash -s stable --ruby
-```
-
-If this message appear 
-
-```
-Can't check signature: No public key
-```
-
-run this command 
-
-````
-gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BD
-````
-
-Android SDK 
 ---
 
-**android sdk** 
+## ⚡ Quick Start
 
-```
-sudo apt-get install adb android-sdk-platform-tools-common
-sudo apt-get install android-tools-adb android-tools-fastboot
-sudo apt install android-sdk
-```
-libraries are in the path `/usr/lib/android-sdk/`
+### Option 1: Zero-Touch Headless Flash (Cloud-Init)
 
-https://linoxide.com/ubuntu-how-to/install-android-sdk-manager-linux-ubuntu-16-04/
+1. Flash **Ubuntu Server 24.04 LTS** onto your MicroSD/NVMe using **Raspberry Pi Imager** or `dd`.
+2. Copy [`cloud-init/user-data.example`](file:///Users/usermone/local/projects/ubuntu_raspberry_pi_4/cloud-init/user-data.example) to the boot partition as `user-data`.
+3. Power on the device. It will automatically configure Wi-Fi/LAN, set up your SSH keys, update packages, and enable UFW + Fail2ban.
 
-https://developer.android.com/studio#systemrequirements
+### Option 2: Interactive Installer Wizard
 
-http://www.timelesssky.com/blog/building-android-sdk-build-tools-aapt-for-debian-arm
+Clone the repository on your Ubuntu server or workstation and run:
 
-https://github.com/skyleecm/android-build-tools-for-arm/tree/build-21
+```bash
+git clone https://github.com/LeopoldoIII/ubuntu_raspberry_pi_4.git
+cd ubuntu_raspberry_pi_4
 
-https://www.reddit.com/r/androiddev/comments/cr79qk/android_sdk_for_arm/
-
-```
-#ANDROID HOME 
-export ANDROID_HOME=~/usr/lib/android-sdk
-export PATH=$ANDROID_HOME/platform-tools:$PATH
-export PATH=$ANDROID_HOME/tools:$PATH
+# Launch the interactive terminal wizard
+make install
+# or directly:
+chmod +x script.sh && ./script.sh
 ```
 
+### Option 3: Automated CLI / Makefile Execution
 
-JAVA
----
-https://linuxize.com/post/install-java-on-raspberry-pi/
+Run specific stacks or unattended full installation:
 
+```bash
+# Unattended full setup
+make setup
 
-
-SSH ubuntu-server
----
-https://phoenixnap.com/kb/enable-ssh-raspberry-pi
-https://pimylifeup.com/ubuntu-server-raspberry-pi/
-
-
-Oh My ZSH
----
+# Individual Stack & IaC Control
+make up-monitoring # Start Dashy Dashboard, Beszel Telemetry & Portainer
+make up-db         # Start PostgreSQL (pgvector), Redis & Adminer
+make up-llm        # Start Ollama & Open WebUI
+make up-security  # Start SonarQube, OWASP ZAP, Trivy & Tailscale
+make up-cicd      # Start Woodpecker CI Engine
+make up-floci     # Start Floci Cloud Emulators
+make tf-apply     # Run Terraform IaC against local Floci cloud emulator
+make ansible-play # Run Ansible playbook across nodes
+make k3s-up       # Install K3s Kubernetes Engine
 ```
-sudo apt-get install zsh
-sudo apt-get install git-core
-chsh -s `which zsh`
-```
 
-https://geekytheory.com/como-instalar-oh-my-zsh-en-ubuntu
-
-Add User 
 ---
 
-https://linuxize.com/post/how-to-add-and-delete-users-on-ubuntu-18-04/
+## 🛠️ Infrastructure as Code (Terraform) & Ansible
 
+- **Terraform / OpenTofu (`terraform/main.tf`)**: Test real Terraform configurations (`terraform apply`) against your local Floci cloud emulator without requiring AWS accounts or incurring cloud charges!
+- **Ansible (`ansible/playbook.yml`)**: Manage, update, and deploy software across multiple nodes (ThinkPad + Raspberry Pis) simultaneously over SSH using standard playbooks.
 
-sudo
 ---
 
-https://linuxconfig.org/sudo-install-usage-and-sudoers-config-file-basics
+## 🌐 Unified Web Control Console Directory
 
-VPN
+Once started, open your browser to `http://<server-ip>`:
+
+| Service Name | Web Console URL | Description / Role |
+| :--- | :--- | :--- |
+| **Unified Command Center** | `http://<ip>:80` | **Dashy Dashboard** with live service health badges |
+| **Hardware Telemetry Console** | `http://<ip>:8090` | **Beszel/Netdata**: Real-time sub-second CPU/RAM/Temp metrics |
+| **Docker Manager** | `http://<ip>:9000` | **Portainer**: Real-time container logs & terminal exec |
+| **Code Quality & OWASP** | `http://<ip>:9000/sonar` | **SonarQube**: SAST code scanning & security hotspots |
+| **CI/CD Pipeline Console** | `http://<ip>:8000` | **Woodpecker CI**: Live build & test execution tracking |
+| **AI Assistant (Local LLM)** | `http://<ip>:3000` | **Open WebUI**: Local LLM chat & RAG interface |
+| **Floci Cloud Emulator** | `http://<ip>:4000` | **Floci UI**: AWS/GCP/Azure local service simulation |
+| **Database Explorer** | `http://<ip>:8080` | **Adminer**: Visual web explorer for PostgreSQL & Redis |
+
 ---
-After to configure a vpn click on ´Use this connection only for resources on its network´
-![image](https://user-images.githubusercontent.com/26559577/117186430-6ec97080-ada0-11eb-8f0e-b09c8dbc51a2.png)
 
-sdkman
+## 🧠 Local LLM Model Calibration Matrix
+
+The setup engine automatically detects available system RAM and calibrates default model downloads:
+
+| Hardware System | RAM Capacity | Recommended Model | Use Case |
+| :--- | :--- | :--- | :--- |
+| **Lenovo ThinkPad / PC** | 32 GB RAM | `qwen2.5-coder:7b` / `14b` | High-speed, advanced code autocompletion & reasoning |
+| **Mid-tier Server** | 16 GB RAM | `qwen2.5-coder:7b` / `llama3.2:3b` | Great balance of speed and contextual understanding |
+| **Raspberry Pi 5 / 4** | 8 GB RAM | `qwen2.5-coder:3b` / `llama3.2:3b` | Lightweight coding assistance & instruction following |
+| **Raspberry Pi 4** | 4 GB RAM | `qwen2.5-coder:1.5b` / `deepseek-r1:1.5b` | Ultra-compact edge models with low memory footprint |
+
 ---
 
+## ☸️ Kubernetes (K3s) Learning Suite
+
+Pre-configured Kubernetes manifests are located in the `k8s/` directory to practice container orchestration:
+
+```bash
+# 1. Create devlab namespaces
+kubectl apply -f k8s/00-namespace.yaml
+
+# 2. Deploy PostgreSQL StatefulSet with Persistent Volume Claim
+kubectl apply -f k8s/01-postgres-statefulset.yaml
+
+# 3. Apply RBAC and NetworkPolicies for security
+kubectl apply -f k8s/02-security-rbac.yaml
+
+# 4. Deploy Ollama and Floci in Kubernetes
+kubectl apply -f k8s/03-ollama-deployment.yaml
+kubectl apply -f k8s/04-floci-deployment.yaml
+
+# 5. Deploy sample microservice app
+kubectl apply -f k8s/05-sample-app/deployment.yaml
+
+# Check cluster status
+make k8s-status
 ```
-curl -s get.sdkman.io | bash
-source "/home/user/.sdkman/bin/sdkman-init.sh"
-sdk install groovy # install groovy for example
-```
 
+---
+
+## 🛡️ DevSecOps & Security Hardening
+
+- **Firewall**: UFW pre-configured with strict ingress rules.
+- **SSH Protection**: Fail2ban active to ban malicious IP attempts.
+- **Code Vulnerability Scanning**: Run `make scan-code` to execute **Trivy** vulnerability scanning against local source code and Docker containers.
+- **Zero-Trust VPN**: Run `docker compose -f docker/docker-compose.security.yml up -d` to activate **Tailscale** for secure remote access without router port-forwarding.
+
+---
+
+## 📄 License
+
+MIT License. Designed for internal development laboratories, homelabs, and cloud engineering training.

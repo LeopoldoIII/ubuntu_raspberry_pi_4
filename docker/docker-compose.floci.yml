@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  floci-core:
+    image: flociio/floci:latest
+    container_name: devlab-floci-core
+    restart: unless-stopped
+    ports:
+      - "4566:4566" # AWS emulator endpoint (S3, DynamoDB, SQS, SNS, Lambda)
+    environment:
+      - SERVICES=s3,dynamodb,sqs,sns,lambda
+      - DEBUG=1
+    volumes:
+      - floci_data:/var/lib/floci
+
+  floci-ui:
+    image: flociio/floci-ui:latest
+    container_name: devlab-floci-ui
+    restart: unless-stopped
+    ports:
+      - "4000:80"
+    environment:
+      - FLOCI_API_URL=http://floci-core:4566
+    depends_on:
+      - floci-core
+
+volumes:
+  floci_data:
+    name: devlab_floci_data

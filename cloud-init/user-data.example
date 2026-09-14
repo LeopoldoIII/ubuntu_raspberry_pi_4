@@ -1,0 +1,43 @@
+#cloud-config
+
+# Configuration for Ubuntu 24.04 LTS / 22.04 LTS on Raspberry Pi 4/5 or x86_64 machines
+# Rename this file to user-data when flashing via Raspberry Pi Imager or cloud-init
+
+hostname: devlab-node
+timezone: UTC
+
+users:
+  - name: devlab
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    # Replace with your actual password hash (e.g. generated via `openssl passwd -6`)
+    # Default password below is: "devlab123"
+    passwd: "$6$rounds=4096$saltstring$U1r4d/NqK1J9w8S0s4j6p.5zT.K5/3fK0g3Y0R1a.4mJ5o6L7K8a9b0c1d2e3f"
+    ssh_authorized_keys:
+      # Add your public SSH key here for passwordless login:
+      # - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... user@hostname
+
+# Update apt repositories on first boot
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - git
+  - htop
+  - net-tools
+  - ca-certificates
+  - software-properties-common
+  - whiptail
+  - ufw
+  - fail2ban
+
+runcmd:
+  # Enable UFW Firewall with standard SSH access
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow 22/tcp
+  - ufw --force enable
+  # Enable Fail2ban service
+  - systemctl enable --now fail2ban

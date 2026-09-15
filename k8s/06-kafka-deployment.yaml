@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-redpanda
+  namespace: devlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-redpanda
+  template:
+    metadata:
+      labels:
+        app: kafka-redpanda
+    spec:
+      containers:
+      - name: redpanda
+        image: docker.redpanda.com/redpandadata/redpanda:latest
+        args:
+        - redpanda
+        - start
+        - --mode
+        - dev-container
+        - --smp
+        - "1"
+        - --memory
+        - "512M"
+        ports:
+        - containerPort: 9092
+          name: kafka
+        - containerPort: 8081
+          name: schema-reg
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+  namespace: devlab
+spec:
+  type: ClusterIP
+  selector:
+    app: kafka-redpanda
+  ports:
+  - port: 9092
+    targetPort: 9092
+    name: kafka
+  - port: 8081
+    targetPort: 8081
+    name: schema-registry

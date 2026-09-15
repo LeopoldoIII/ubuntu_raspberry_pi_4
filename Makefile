@@ -1,6 +1,6 @@
 # DevLab Environment Makefile
 
-.PHONY: help install setup up-llm up-floci up-db up-security up-cicd up-monitoring down-all k3s-up k8s-status scan-code tf-apply ansible-play
+.PHONY: help install setup up-llm up-floci up-db up-kafka up-security up-cicd up-monitoring down-all k3s-up k8s-status scan-code tf-apply ansible-play
 
 help:
 	@echo "🚀 DevLab Automation CLI"
@@ -11,6 +11,7 @@ help:
 	@echo "  make up-llm          - Start Local LLMs (Ollama + Open WebUI)"
 	@echo "  make up-floci        - Start Floci Cloud Emulation Stack"
 	@echo "  make up-db           - Start Database Stack (PostgreSQL + pgvector, Redis, Adminer)"
+	@echo "  make up-kafka        - Start Kafka Streaming Stack (Redpanda + Web Console)"
 	@echo "  make up-security     - Start DevSecOps Stack (SonarQube, OWASP ZAP, Trivy, Tailscale)"
 	@echo "  make up-cicd         - Start CI/CD Stack (Woodpecker CI)"
 	@echo "  make up-monitoring   - Start Real-Time Monitoring & Dashboard (Dashy, Beszel, Portainer)"
@@ -35,6 +36,9 @@ up-floci:
 
 up-db:
 	docker compose -f docker/docker-compose.databases.yml up -d
+
+up-kafka:
+	docker compose -f docker/docker-compose.kafka.yml up -d
 
 up-security:
 	docker compose -f docker/docker-compose.security.yml up -d
@@ -69,6 +73,7 @@ down-all:
 	-docker compose -f docker/docker-compose.llm.yml down
 	-docker compose -f docker/docker-compose.floci.yml down
 	-docker compose -f docker/docker-compose.databases.yml down
+	-docker compose -f docker/docker-compose.kafka.yml down
 	-docker compose -f docker/docker-compose.security.yml down
 	-docker compose -f docker/docker-compose.cicd.yml down
 	-docker compose -f docker/docker-compose.monitoring.yml down

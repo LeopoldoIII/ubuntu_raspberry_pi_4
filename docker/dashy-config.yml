@@ -59,7 +59,7 @@ sections:
         icon: fas fa-cloud
         statusCheck: true
 
-  - name: Management & Telemetry
+  - name: Management, Databases & Messaging
     icon: fas fa-chart-line
     items:
       - title: Beszel Real-time Telemetry
@@ -76,4 +76,9 @@ sections:
         description: PostgreSQL (pgvector) & Redis Web UI
         url: http://localhost:8080
         icon: fas fa-database
+        statusCheck: true
+      - title: Redpanda Kafka Console
+        description: Real-time Event Stream, Topics & Schema Manager
+        url: http://localhost:8085
+        icon: fas fa-stream
         statusCheck: true

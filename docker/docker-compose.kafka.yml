@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: devlab-kafka-redpanda
+    restart: unless-stopped
+    command:
+      - redpanda start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --pandaproxy-addr 0.0.0.0:8082
+      - --advertise-pandaproxy-addr localhost:8082
+      - --schema-registry-addr 0.0.0.0:8081
+      - --mode dev-container
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+    ports:
+      - "19092:19092" # External Kafka broker port for apps/clients
+      - "8082:8082"   # HTTP Proxy API
+      - "8081:8081"   # Schema Registry API
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:latest
+    container_name: devlab-kafka-console
+    restart: unless-stopped
+    ports:
+      - "8085:8080" # Web UI for Kafka Topics, Messages, Consumer Groups & Schemas
+    environment:
+      - KAFKA_BROKERS=redpanda:9092
+      - KAFKA_SCHEMAREGISTRY_ENABLED=true
+      - KAFKA_SCHEMAREGISTRY_URLS=http://redpanda:8081
+    depends_on:
+      - redpanda
+
+volumes:
+  redpanda_data:
+    name: devlab_redpanda_data

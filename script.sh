@@ -63,8 +63,10 @@ configure_hardening() {
     sudo ufw allow 3000/tcp # Open WebUI
     sudo ufw allow 8000/tcp # Woodpecker CI
     sudo ufw allow 8080/tcp # Adminer
+    sudo ufw allow 8085/tcp # Redpanda Kafka Console
     sudo ufw allow 8090/tcp # Beszel Telemetry
     sudo ufw allow 9000/tcp # Portainer & SonarQube
+    sudo ufw allow 19092/tcp # Kafka External Broker
     sudo ufw --force enable || true
     sudo systemctl enable --now fail2ban || true
     log_success "Host security hardening active."
@@ -136,6 +138,7 @@ start_docker_stacks() {
     
     [ -f "docker/docker-compose.monitoring.yml" ] && docker compose -f docker/docker-compose.monitoring.yml up -d
     [ -f "docker/docker-compose.databases.yml" ] && docker compose -f docker/docker-compose.databases.yml up -d
+    [ -f "docker/docker-compose.kafka.yml" ] && docker compose -f docker/docker-compose.kafka.yml up -d
     [ -f "docker/docker-compose.llm.yml" ] && docker compose -f docker/docker-compose.llm.yml up -d
     [ -f "docker/docker-compose.floci.yml" ] && docker compose -f docker/docker-compose.floci.yml up -d
     [ -f "docker/docker-compose.security.yml" ] && docker compose -f docker/docker-compose.security.yml up -d
@@ -154,11 +157,12 @@ run_interactive_wizard() {
 
     CHOICES=$(whiptail --title "DevLab Interactive Setup Wizard" \
         --checklist "Detected System: ${ARCH} | RAM: ${TOTAL_RAM_GB}GB | Free Storage: ${FREE_DISK_GB}GB\n\nSelect components to install:" \
-        20 78 10 \
+        20 78 11 \
         "BASE" "System Update & Host Hardening (UFW Firewall, Fail2ban)" ON \
         "DOCKER" "Docker Engine & Docker Compose Plugin" ON \
         "MONITORING" "Unified Web Dashboard (Dashy), Beszel Telemetry & Portainer" ON \
         "DATABASES" "Database Stack (PostgreSQL + pgvector, Redis, Adminer)" ON \
+        "KAFKA" "Event Streaming Stack (Redpanda Kafka & Web Console)" ON \
         "LLM" "Local LLM Engine (Ollama + Open WebUI - Auto: ${RECOMMENDED_MODEL})" ON \
         "FLOCI" "Cloud Emulation Stack (Floci AWS/GCP/Azure)" ON \
         "SECURITY" "DevSecOps Suite (SonarQube SAST, OWASP ZAP, Trivy, Tailscale)" ON \
@@ -234,6 +238,7 @@ main() {
     echo -e "📊 Hardware Telemetry Console: ${GREEN}http://localhost:8090${NC}"
     echo -e "🐳 Container Manager         : ${GREEN}http://localhost:9000${NC}"
     echo -e "🧠 Local LLM Open WebUI      : ${GREEN}http://localhost:3000${NC}"
+    echo -e "📡 Redpanda Kafka Console    : ${GREEN}http://localhost:8085${NC}"
     echo -e "🛠️  CI/CD Console (Woodpecker): ${GREEN}http://localhost:8000${NC}"
     echo -e "🔍 SonarQube Code Scanner    : ${GREEN}http://localhost:9000/sonar${NC}"
     echo ""

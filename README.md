@@ -4,11 +4,12 @@
 [![Docker Engine](https://img.shields.io/badge/Docker-26.0+-blue?style=flat&logo=docker)](https://docker.com)
 [![Kubernetes K3s](https://img.shields.io/badge/Kubernetes-K3s-326CE5?style=flat&logo=kubernetes)](https://k3s.io)
 [![Ollama LLM](https://img.shields.io/badge/AI-Ollama-black?style=flat&logo=ollama)](https://ollama.com)
+[![Redpanda Kafka](https://img.shields.io/badge/Kafka-Redpanda-red?style=flat&logo=apachekafka)](https://redpanda.com)
 [![Floci Cloud](https://img.shields.io/badge/Cloud%20Emulator-Floci.io-purple?style=flat&logo=amazon-aws)](https://github.com/floci-io)
 [![SonarQube](https://img.shields.io/badge/Security-SonarQube-4E9BCD?style=flat&logo=sonarqube)](https://sonarqube.org)
 [![Terraform / IaC](https://img.shields.io/badge/IaC-Terraform-7B42BC?style=flat&logo=terraform)](https://terraform.io)
 
-Transform your hardware—whether a **Lenovo ThinkPad / PC (x86_64, 32GB RAM)** or a **Raspberry Pi 4/5 (ARM64, 4GB/8GB RAM)**—into a state-of-the-art, fully containerized **Internal Development, AI, Kubernetes & DevSecOps Laboratory**.
+Transform your hardware—whether a **Lenovo ThinkPad / PC (x86_64, 32GB RAM)** or a **Raspberry Pi 4/5 (ARM64, 4GB/8GB RAM)**—into a state-of-the-art, fully containerized **Internal Development, AI, Event Streaming, Kubernetes & DevSecOps Laboratory**.
 
 ---
 
@@ -16,6 +17,7 @@ Transform your hardware—whether a **Lenovo ThinkPad / PC (x86_64, 32GB RAM)** 
 
 - **Interactive TUI Installer Wizard (`script.sh`)**: Terminal User Interface powered by `whiptail` that auto-detects CPU architecture (`x86_64` vs `arm64`), total RAM, and storage space, dynamically calibrating recommended LLM models.
 - **Local AI & Coding Assistant Stack**: Containerized **Ollama** engine paired with **Open WebUI** and OpenAI-compatible API endpoint (`http://localhost:11434/v1`) for VS Code / Antigravity / Continue.dev integration.
+- **Event Streaming & Messaging (Kafka / Redpanda)**: High-performance C++ Kafka-compatible engine (**Redpanda**) running in KRaft mode (zero ZooKeeper required) with web console UI to inspect topics, messages, consumer groups, and schemas.
 - **Offline Cloud Emulation with Floci**: Emulate AWS/GCP/Azure services (S3, DynamoDB, SQS, SNS, Lambda) locally without cloud accounts using [Floci.io](https://github.com/floci-io).
 - **Infrastructure as Code (Terraform) & Automation (Ansible)**: Provision local cloud resources using Terraform against Floci local endpoints and manage multi-node deployments over SSH with Ansible playbooks.
 - **Databases & AI Vector Store**: **PostgreSQL 16** with `pgvector` extension for RAG (Retrieval-Augmented Generation) applications, **Redis 7** for caching/queues, and **Adminer** for visual web management.
@@ -39,11 +41,12 @@ graph TD
     C --> H["IaC & Automation Engine (Terraform & Ansible)"]
 
     F --> F1["Local LLMs: Ollama + Open WebUI"]
-    F --> F2["Cloud Emulation: Floci AWS/GCP/Azure"]
-    F --> F3["Databases: PostgreSQL (pgvector) + Redis + Adminer"]
-    F --> F4["DevSecOps: SonarQube + OWASP ZAP + Trivy + Tailscale"]
-    F --> F5["CI/CD Pipeline: Woodpecker CI Server & Runner"]
-    F --> F6["Real-Time Telemetry: Beszel + Portainer"]
+    F --> F2["Event Streaming: Redpanda Kafka + Web Console"]
+    F --> F3["Cloud Emulation: Floci AWS/GCP/Azure"]
+    F --> F4["Databases: PostgreSQL (pgvector) + Redis + Adminer"]
+    F --> F5["DevSecOps: SonarQube + OWASP ZAP + Trivy + Tailscale"]
+    F --> F6["CI/CD Pipeline: Woodpecker CI Server & Runner"]
+    F --> F7["Real-Time Telemetry: Beszel + Portainer"]
 
     H --> H1["Terraform / OpenTofu (Local S3, DynamoDB, SQS on Floci)"]
     H --> H2["Ansible Playbooks (Multi-Node Server Provisioning)"]
@@ -88,6 +91,7 @@ make setup
 # Individual Stack & IaC Control
 make up-monitoring # Start Dashy Dashboard, Beszel Telemetry & Portainer
 make up-db         # Start PostgreSQL (pgvector), Redis & Adminer
+make up-kafka      # Start Redpanda Kafka & Web Console
 make up-llm        # Start Ollama & Open WebUI
 make up-security  # Start SonarQube, OWASP ZAP, Trivy & Tailscale
 make up-cicd      # Start Woodpecker CI Engine
@@ -115,6 +119,7 @@ Once started, open your browser to `http://<server-ip>`:
 | **Unified Command Center** | `http://<ip>:80` | **Dashy Dashboard** with live service health badges |
 | **Hardware Telemetry Console** | `http://<ip>:8090` | **Beszel/Netdata**: Real-time sub-second CPU/RAM/Temp metrics |
 | **Docker Manager** | `http://<ip>:9000` | **Portainer**: Real-time container logs & terminal exec |
+| **Kafka Event Console** | `http://<ip>:8085` | **Redpanda Console**: Web UI for topics, messages & schemas |
 | **Code Quality & OWASP** | `http://<ip>:9000/sonar` | **SonarQube**: SAST code scanning & security hotspots |
 | **CI/CD Pipeline Console** | `http://<ip>:8000` | **Woodpecker CI**: Live build & test execution tracking |
 | **AI Assistant (Local LLM)** | `http://<ip>:3000` | **Open WebUI**: Local LLM chat & RAG interface |
@@ -150,9 +155,10 @@ kubectl apply -f k8s/01-postgres-statefulset.yaml
 # 3. Apply RBAC and NetworkPolicies for security
 kubectl apply -f k8s/02-security-rbac.yaml
 
-# 4. Deploy Ollama and Floci in Kubernetes
+# 4. Deploy Ollama, Floci, and Kafka in Kubernetes
 kubectl apply -f k8s/03-ollama-deployment.yaml
 kubectl apply -f k8s/04-floci-deployment.yaml
+kubectl apply -f k8s/06-kafka-deployment.yaml
 
 # 5. Deploy sample microservice app
 kubectl apply -f k8s/05-sample-app/deployment.yaml
